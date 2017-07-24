@@ -122,3 +122,82 @@ mo = xmasRegex.findall('12 drummers, 11 pipers, 10 lords, 9 ladies, 8 maids, 7 s
 
 print(mo)
 
+# Actually that short hand is called creating your own character classes
+# You can make your own by placing chars in brackets []
+# These don't need escape chars.  And you can use dashes to go from one char to another
+# I.E. [a-zA-Z0-9] for alphanumeric
+# You can make it a negative class (any char not in the class qualifies) by having a ^ right after the opening brackets
+
+punctRegex = re.compile(r'[!.?,;:\'"]')
+
+mo = punctRegex.findall("'Is this some kind of test?', remarked Gandalf! ;.:\" \\")
+
+print(mo)
+
+# Some other things you've seen but not had to use...
+# ^ sign can force the pattern match to the beginning of the string.
+# $ to the end.  IE '^Hello', '\d$' or '^blahblah$'
+
+# . can be wildcards matching any character but a newline. /. escapes it for a real period
+
+atRegex = re.compile(r'.at')
+mo = atRegex.findall('The cat in the hat sat on the flat mat.')
+
+print(mo)
+
+# .* matches all text, sometimes useful, and does it in a greedy way. .*? matches non greedy
+
+nongreedyRegex = re.compile(r'<.*?>')
+greedyRegex    = re.compile(r'<.*>')
+
+mo = nongreedyRegex.search('<To serve man> for dinner.>')
+
+print(mo.group())
+
+mo = greedyRegex.search('<To serve man> for dinner.>')
+
+print(mo.group())
+
+# The . being all chars except newline can be changed by adding re.DOTALL as the second param to compile
+# Now it will identify newlines too
+
+# By defult as well, regex is case sensitive, but you can re.I or re.IGNORECASE to change that behavior
+
+# Okay, now on to subsitutions.
+# Using the sub() method, you can search a string, and replace the identified charaters.
+# It takes two params obviously.
+
+namesRegex = re.compile(r'Agent \w+')
+
+mo = namesRegex.sub('CENSORED', 'Agent Alice gave the secret documents to Agent Bob.')
+
+print(mo)
+
+namesRegex = re.compile(r'Agent (\w)\w*')
+
+mo = namesRegex.sub(r'\1****', 'Agent Alice gave the secret documents to Agent Bob.')
+
+print(mo)
+
+# If your expressions get really large, you can pass an option to the compile, to allow for "verbose" expressions.
+# These expressions allow whitespace and comments, so you can better document what the heck your doing in that blob of
+# almost random characters.
+
+# OMG no...
+# phoneRegex = re.compile(r'((\d{3}|\(\d{3}\))?(\s|-|\.)?\d{3}(\s|-|\.)\d{4}(\s*(ext|x|ext.)\s*\d{2,5})?)')
+
+phoneRegex = re.compile(r'''
+    (\d{3}|\(\d{3}\))?            # area code, with or without parens, returned as a group and the whole thing optional
+    (\s|-|.)?                     # area code seporator as a space, -, or period, returned as a group and optional
+    \d{3}                         # number prefix (why no group here?)
+    (\s|-|.)                      # prefix code seporator as a space, -, or period, returned as a group
+    \d{4}                         # number suffix (why no group here?)
+    (\s*(ext|x|ext.)\s*\d{2,5})?  # extension with zero or more spaces before, ext, x, or ext. space and 2-5 numbers returned group
+''', re.VERBOSE)
+
+mo = phoneRegex.search('My number is 415-555-4242.')
+
+print(mo.group())
+
+# If you need multiple flags to pass to compile, you bitwise or them together with |
+# I.E. someRegexValue = re.compile('foo', re.IGNORECASE | re.DOTALL | re.VERBOSE)
