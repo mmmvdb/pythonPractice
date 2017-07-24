@@ -6,7 +6,7 @@ import re
 # re is the modual for regular expressions
 
 # To set up the regex rule, you use re.compile, passing the expression and collecting the object
-# Then to use it, you use the object's .search passing the text, returning a group object
+# Then to use it, you use the object's .search passing the text, returning a match object
 # To access the group you can call group() or group(0).
 phoneNumRegex = re.compile(r'\d{3}-\d{3}-\d{4}')
 
@@ -59,7 +59,7 @@ print("Main number :", mainNumber)
 
 # But this is something new to me.
 
-# The value returned in the group object is "greedy"
+# The value returned in the match object is "greedy"
 # That is it returns the largest string that qualified the expression
 
 greedyHaRegex = re.compile(r'(Ha){3,5}')
@@ -201,3 +201,157 @@ print(mo.group())
 
 # If you need multiple flags to pass to compile, you bitwise or them together with |
 # I.E. someRegexValue = re.compile('foo', re.IGNORECASE | re.DOTALL | re.VERBOSE)
+
+
+
+# End questions
+
+# Q:1. What is the function that creates Regex objects?
+
+#    re.compile()
+    
+# Q:2. Why are raw strings often used when creating Regex objects?
+
+#   Because you'd have to escape a bunch of frequently used characters like / if you didn't use raw.  Raw lets you avoid all that.
+
+# Q:3. What does the search() method return?
+
+#   I believe it returns a match object.
+
+# Q:4. How do you get the actual strings that match the pattern from a Match object?
+
+#   either by calling .group() or .group(0) on the object. 
+
+# Q:5. In the regex created from r'(\d\d\d)-(\d\d\d-\d\d\d\d)', what does group 0 cover? Group 1? Group 2?
+
+#   all of the match, the areacode like thing, the number.
+
+# Q:6. Parentheses and periods have specific meanings in regular expression syntax. How would you specify that you want a regex to match actual parentheses and period characters?
+
+#   You'd have to escape them with a /
+
+# Q:7. The findall() method returns a list of strings or a list of tuples of strings. What makes it return one or the other?
+
+#   If you have groups it returns tuples
+
+# Q:8. What does the | character signify in regular expressions?
+
+#   It's an or, like match this or that.
+
+# Q:9. What two things does the ? character signify in regular expressions?
+
+#   It can mean to match 0 or 1 times, but depending on location can also make things non-greedy
+    
+# Q:10. What is the difference between the + and * characters in regular expressions?
+
+#   * 0-any, + 1-any repetitions
+
+# Q:11. What is the difference between {3} and {3,5} in regular expressions?
+
+#   {3} three repetitions, {3,5} 3, 4, or 5 repetitions
+
+# Q:12. What do the \d, \w, and \s shorthand character classes signify in regular expressions?
+
+#   d = digit, w = letter, digit, or _, \s any space tab or newline
+
+# Q:13. What do the \D, \W, and \S shorthand character classes signify in regular expressions?
+
+#   they are just negetive classes of the above.  Any char but the ones above.
+
+# Q:14. How do you make a regular expression case-insensitive?
+
+#   At compile() time, you have to pass a re.IGNORECASE or re.I as a second param
+
+# Q:15. What does the . character normally match? What does it match if re.DOTALL is passed as the second argument to re.compile()?
+
+#   It normally means a any char but newline, but re.DOTALL can make it qualify any char even newlines 
+
+# Q:16. What is the difference between these two: .* and .*?
+
+#   .* qualifies any character sequence, and will qualify the most possible.  .*? Will qualify the least possible.
+
+# Q:17. What is the character class syntax to match all numbers and lowercase letters?
+
+#   [a-z0-9] is what I'd use
+
+# Q:18. If numRegex = re.compile(r'\d+'), what will numRegex.sub('X', '12 drummers, 11 pipers, five rings, 3 hens') return?
+
+#   I'll test but I think it would return, "X drummers, X pipers, five rings, X hens", yep
+
+# Q:19. What does passing re.VERBOSE as the second argument to re.compile() allow you to do?
+
+#   It allows for whitespace and comments in the regex to make it easier to understand the big nasty stuff
+
+# Q:20. How would you write a regex that matches a number with commas for every three digits? It must match the following:
+#   '42'
+#   '1,234'
+#   '6,368,745'
+# but not the following:
+#   '12,34,567' (which has only two digits between the commas)
+#   '1234' (which lacks commas)
+
+#   Hmm, let's try
+
+#niceNum = re.compile(r'\d{1,3}(,\d{3})+|\d{1,3}[^,\d]')
+# This had some problems.
+
+#   Let's try:
+
+niceNum = re.compile(r'^\d{1,3}(,\d{3})*$')
+
+print(niceNum.search('42'))
+print(niceNum.search('1,234'))
+print(niceNum.search('6,368,745'))
+print(niceNum.search('12,34,567'))
+print(niceNum.search('1234'))
+
+# sort of cheating I guess if we wanted to find it in the middle of another string.  But I guess I could space it instead of
+# end string it
+
+# Q:21. How would you write a regex that matches the full name of someone whose last name is Nakamoto? You can assume that the 
+#       first name that comes before it will always be one word that begins with a capital letter. The regex must match the following:
+#   'Satoshi Nakamoto'
+#   'Alice Nakamoto'
+#   'Robocop Nakamoto'
+# but not the following:
+#   'satoshi Nakamoto' (where the first name is not capitalized)
+#   'Mr. Nakamoto' (where the preceding word has a nonletter character)
+#   'Nakamoto' (which has no first name)
+#   'Satoshi nakamoto' (where Nakamoto is not capitalized)
+
+#   Let's try:
+
+fullName = re.compile(r'[A-Z][a-z]+\sNakamoto')
+
+print(fullName.search('Satoshi Nakamoto'))
+print(fullName.search('Alice Nakamoto'))
+print(fullName.search('Robocop Nakamoto'))
+print(fullName.search('satoshi Nakamoto'))
+print(fullName.search('Mr. Nakamoto'))
+print(fullName.search('Nakamoto'))
+print(fullName.search('Satoshi nakamoto'))
+
+# Q:22. How would you write a regex that matches a sentence where the first word is either Alice, Bob, or Carol; the second word is either eats, pets, 
+#       or throws; the third word is apples, cats, or baseballs; and the sentence ends with a period? This regex should be case-insensitive. It must match the following:
+#   'Alice eats apples.'
+#   'Bob pets cats.'
+#   'Carol throws baseballs.'
+#   'Alice throws Apples.'
+#   'BOB EATS CATS.'
+# but not the following:
+#   'Robocop eats apples.'
+#   'ALICE THROWS FOOTBALLS.'
+#   'Carol eats 7 cats.'
+
+#   Let's try:
+
+sentenceRe = re.compile(r'(Alice|Bob|Carol) (eats|pets|throws) (apples|cats|baseballs)\s*.*\.', re.I)
+
+print(sentenceRe.search('Alice eats apples.'))
+print(sentenceRe.search('Bob pets cats.'))
+print(sentenceRe.search('Carol throws baseballs.'))
+print(sentenceRe.search('Alice throws Apples.'))
+print(sentenceRe.search('BOB EATS CATS.'))
+print(sentenceRe.search('Robocop eats apples.'))
+print(sentenceRe.search('ALICE THROWS FOOTBALLS.'))
+print(sentenceRe.search('Carol eats 7 cats.'))
