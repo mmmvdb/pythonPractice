@@ -355,3 +355,59 @@ print(sentenceRe.search('BOB EATS CATS.'))
 print(sentenceRe.search('Robocop eats apples.'))
 print(sentenceRe.search('ALICE THROWS FOOTBALLS.'))
 print(sentenceRe.search('Carol eats 7 cats.'))
+
+
+#Practice Projects
+#Strong Password Detection
+#   Write a function that uses regular expressions to make sure the password string it is passed is strong. A strong password is 
+#   defined as one that is at least eight characters long, contains both uppercase and lowercase characters, and has at least one 
+#   digit. You may need to test the string against multiple regex patterns to validate its strength.
+
+def strongPassword(password):
+    #Lets do this the dumb way and just check for each
+    
+    capitols = re.compile(r'[A-Z]')
+    lower    = re.compile(r'[a-z]')
+    number  = re.compile(r'\d')
+    length   = re.compile(r'.{8,}')
+    
+    if capitols.search(password) != None:
+        capTest = capitols.search(password).group()
+    else:
+        capTest = ''
+    if lower.search(password) != None:
+        lowTest = lower.search(password).group()
+    else:
+        lowTest = ''
+    if number.search(password) != None:
+        numTest = number.search(password).group()
+    else:
+        numTest = ''
+    if length.search(password) != None:
+        lenTest = length.search(password).group()
+    else:
+        lenTest = ''
+    
+    print('capTest: ' + capTest)
+    print('lowTest: ' + lowTest)
+    print('numTest: ' + numTest)
+    print('lenTest: ' + lenTest)
+    
+    if len(capTest) > 0 and len(lowTest) > 0 and len(numTest) > 0 and len(lenTest) > 0:
+        return True
+    else:
+        return False
+
+print(strongPassword('AndyLoves98'))
+print(strongPassword('1lazypassword'))
+print(strongPassword('5YELLING'))
+print(strongPassword('ThisisaTest'))
+print(strongPassword('Az9'))
+        
+        
+#Regex Version of strip()
+#   Write a function that takes a string and does the same thing as the strip() string method. If no other arguments are passed 
+#   other than the string to strip, then whitespace characters will be removed from the beginning and end of the string. 
+#   Otherwise, the characters specified in the second argument to the function will be removed from the string.
+
+stripRe = re.compile(r'')
