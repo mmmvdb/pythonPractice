@@ -387,12 +387,7 @@ def strongPassword(password):
         lenTest = length.search(password).group()
     else:
         lenTest = ''
-    
-    print('capTest: ' + capTest)
-    print('lowTest: ' + lowTest)
-    print('numTest: ' + numTest)
-    print('lenTest: ' + lenTest)
-    
+        
     if len(capTest) > 0 and len(lowTest) > 0 and len(numTest) > 0 and len(lenTest) > 0:
         return True
     else:
@@ -410,4 +405,41 @@ print(strongPassword('Az9'))
 #   other than the string to strip, then whitespace characters will be removed from the beginning and end of the string. 
 #   Otherwise, the characters specified in the second argument to the function will be removed from the string.
 
-stripRe = re.compile(r'')
+# Okay, looking at the doc, this is a string function that takes a string, and an optional parameter for characters to check
+# It returns a copy of the passed in string with leading and trailing characters removed.  If chars are ommited or None, whitespace
+# is assumed.  If chars is passed in, it should be a string, and all the characters are concidered relevent to the stripping
+
+def regexStrip(stripString, chars=None):
+    
+    if chars == None:
+        stripChars = '\s'
+    else:
+        stripChars = chars
+    
+    stripRe = re.compile(r'([' + stripChars + r']*)(.*)([' + stripChars + r']*)')
+    
+    stripFront = re.compile(r'^([' +stripChars + r']*)(.*)')
+    stripBack  = re.compile(r'(.*?)([' +stripChars + r']*)$')
+    
+    retString = stripFront.search(stripString).group(2)
+    
+    retString = stripBack.search(retString).group(1)
+
+    return(retString)
+    
+print('==== regexStrip Testing ====')
+
+print(regexStrip('  Welcome to RegExr v2.1   ') + '.')
+print(regexStrip('  Welcome to RegExr v2.1') + '.')
+print(regexStrip('Welcome to RegExr v2.1   ') + '.')
+
+
+print(regexStrip('zzzWelcome to RegExr v2.1zzz', 'z') + '.')
+print(regexStrip('zzzWelcome to RegExr v2.1', 'z') + '.')
+print(regexStrip('Welcome to RegExr v2.1zzz', 'z') + '.')
+
+print(regexStrip('ABSDRTWelcome to RegExr v2.1ABSDRT', 'ABSDRT') + '.')
+
+# This mostly works but will get into real problems if we pass in regex syntax or [] characters.
+# I'm going to ignore that for now knowing that this course is about learning how to automate, and would
+# mainly be used just for me for now.
