@@ -179,3 +179,39 @@ fileObj.close()
 
 import myCats
 print(myCats.cats)
+
+# Q:1. What is a relative path relative to?
+
+# A relative path is basically a way to navigate through the tree without going back to the root
+  
+# Q:2. What does an absolute path start with?
+
+# usually a ./ which mean the current working directory
+  
+# Q:3. What do the os.getcwd() and os.chdir() functions do?
+
+# gets the current working directory, and changes directory
+  
+# Q:4. What are the . and .. folders?
+
+# They are not really folders, but aliases for the current working directory and the parent directory
+  
+# Q:5. In C:\bacon\eggs\spam.txt, which part is the dir name, and which part is the base name?
+
+# the dir name is c:\bacon\eggs\ and the "base" or file is spam.txt
+  
+# Q:6. What are the three “mode” arguments that can be passed to the open() function?
+
+# I'm sure there are more than just three, but "r" is read, "w" is write, and "a" is append
+  
+# Q:7. What happens if an existing file is opened in write mode?
+
+# Writing will overwrite anything there
+  
+# Q:8. What is the difference between the read() and readlines() methods?
+
+# read treats the whole file like a huge string, with new lines involved.  readlines breaks the lines into a list, still with the 
+# newlines
+  
+# Q:9. What data structure does a shelf value resemble?
+# a dictionary
