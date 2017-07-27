@@ -14,6 +14,9 @@ if len(sys.argv) == 3:
     path     = sys.argv[1]
     reString = sys.argv[2]
 
+    print(reString)
+    reSearch = re.compile(reString)
+    
     # ==== Navigate to the folder ====
     if os.path.isdir(path):
         os.chdir(path)
@@ -21,11 +24,19 @@ if len(sys.argv) == 3:
         print(path + ' is an invalid path')
     
     # ==== Gather all txt files ====
-    for file in os.listdir('.'):
-        if file.endswith('.txt'):
+    for filename in os.listdir('.'):
+        if filename.endswith('.txt'):
             # ==== In each file, use the regex to find a match ====
+            file = open(os.path.join(os.getcwd(),filename))
+            fileLineList = file.readlines()
+            file.close()
             
-            #    ==== Print the result ====
+            for line in fileLineList:
+                reResult = reSearch.search(line)
+            
+                if reResult != None:
+                    #    ==== Print the result ====
+                    print(filename + ': ' + line)
 
 else:
     print('folderRegex.py - Search a folder for all .txt files and search them with the regex')
